@@ -35,7 +35,7 @@ class ScraperContext:
             fileData = Tool.readFile(file)
         self.strategy.setDriver(driver= self.driver)
         self.strategy.setSearchInputKeywords(searchInput= searchInput, keywords= keywords)
-        self.strategy.setLocation(location)
+        # self.strategy.setLocation(location)
         data = self.strategy.doSearch(fileData)
         data = Tool.getAlexaRank(data, min_popularity, max_popularity)
         return data
