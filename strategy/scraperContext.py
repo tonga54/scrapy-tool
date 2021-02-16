@@ -1,6 +1,7 @@
 from .scraper import Scraper
 from services.tool import Tool
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 from .googleSearch import GoogleSearch
 
 class ScraperContext:
@@ -9,7 +10,10 @@ class ScraperContext:
 
     def setDriver(self, driver = "chrome"):
         if driver == "chrome":
-            self.driver = webdriver.Chrome(executable_path="drivers/chromedriver")
+            gChromeOptions = webdriver.ChromeOptions()
+            gChromeOptions.add_argument("window-size=1920x1480")
+            gChromeOptions.add_argument("disable-dev-shm-usage")
+            self.driver = webdriver.Chrome(chrome_options=gChromeOptions, executable_path= ChromeDriverManager().install())
 
     def setEngine(self, engine = "google"):
         if engine == "google":
