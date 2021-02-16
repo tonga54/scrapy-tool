@@ -15,7 +15,7 @@ class ScraperContext:
             chrome_options.add_argument("--headless")
             chrome_options.add_argument("--disable-dev-shm-usage")
             chrome_options.add_argument("--no-sandbox")
-            driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+            self.driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
     def setEngine(self, engine = "google"):
         if engine == "google":
@@ -35,7 +35,7 @@ class ScraperContext:
             fileData = Tool.readFile(file)
         self.strategy.setDriver(driver= self.driver)
         self.strategy.setSearchInputKeywords(searchInput= searchInput, keywords= keywords)
-        # self.strategy.setLocation(location)
+        self.strategy.setLocation(location)
         data = self.strategy.doSearch(fileData)
         data = Tool.getAlexaRank(data, min_popularity, max_popularity)
         return data

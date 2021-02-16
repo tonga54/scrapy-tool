@@ -14,8 +14,7 @@ class GoogleSearch(Scraper):
         self.keywords = keywords
 
     def setLocation(self, location = {}):
-        pass
-        # self.driver.execute_cdp_cmd("Emulation.setGeolocationOverride", location)
+        self.driver.execute_cdp_cmd("Emulation.setGeolocationOverride", location)
 
     def doSearch(self, urlList):
         self.driver.get("https://google.com")
