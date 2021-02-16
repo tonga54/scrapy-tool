@@ -9,7 +9,7 @@ class ScraperContext:
 
     def setDriver(self, driver = "chrome"):
         if driver == "chrome":
-            self.driver = webdriver.Chrome(executable_path="flaskr/chromedriver")
+            self.driver = webdriver.Chrome(executable_path="./chromedriver")
 
     def setEngine(self, engine = "google"):
         if engine == "google":
