@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="col-lg-8 offset-lg-2">
+        <!-- START card -->
+        <div class="card card-default">
+            <div class="card-header ">
+                <div class="card-title">
+                    <h5>Search</h5>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- <h5>Search:</h5> -->
+                <form class="" role="form" id="searchForm">
+                    <div class="form-group form-group-default required">
+                        <label>Term:</label>
+                        <input type="text" class="form-control" name="term" id="term">
+                    </div>
+                    <div class="row">
+                        <div class="form-group form-group-default col-lg-6">
+                            <label>Keywords:</label>
+                            <input class="tagsinput custom-tag-input" type="text" name="keywords" id="keywords"/>
+                        </div>
+                        <div class="form-group form-group-default form-group-default-select2 col-lg-6">
+                            <label>Ignore:</label>
+                            <select class=" full-width" data-init-plugin="select2" multiple id="ignore" name="ignore">
+                                <option value="youtube">YouTube</option>
+                                <option value="facebook">Facebook</option>
+                                <option value="instagram">Instagram</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group form-group-default col-lg-6">
+                            <label>Alexa Min Popularity:</label>
+                            <input class="form-control" type="number" value="" id="alexaMin" name="alexaMin"/>
+                        </div>
+                        <div class="form-group form-group-default col-lg-6">
+                            <label>Alexa Max Popularity:</label>
+                            <input class="form-control" type="number" value="" id="alexaMax" name="alexaMax"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group form-group-default col-lg-6">
+                            <label>File:</label>
+                            <input class="form-control" type="file" value="" id="file" name="file"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-2">
+                            <label>Engine:</label>
+                            <select class="cs-select cs-skin-slide" data-init-plugin="cs-select" id="engine" name="engine">
+                                <option value="google">Google</option>
+                                <option value="yahoo">Yahoo</option>
+                                <option value="bing">Bing</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-2">
+                            <label>Driver:</label>
+                            <select class="cs-select cs-skin-slide" data-init-plugin="cs-select" id="driver" name="driver">
+                                <option value="chrome">Chrome</option>
+                                <option value="firefox">Firefox</option>
+                                <option value="safari">Safari</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <a class="btn btn-success btn-cons float-right" style="color: white;" id="process">Process</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid container-fixed-lg hidden" id="resultsContainer">
+        <!-- START card -->
+        <div class="card card-transparent">
+          <div class="card-header ">
+            <div class="card-title">Table with Dynamic Rows
+            </div>
+            <div class="clearfix"></div>
+            <div class="export-options-container"></div>
+          </div>
+          <div class="card-body">
+            <table class="table table-hover demo-table-dynamic table-responsive-block" id="tableWithDynamicRows">
+              <thead>
+                <tr>
+                  <th>Url</th>
+                  <th>Keywords Rank</th>
+                  <th>Popularity</th>
+                  <th>Country Name</th>
+                  <th>Country Rank</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+{% endblock %}
+{% block script %}
+    <script>
+        $(document).ready(function(){
+
+            $("#searchForm").validate({
+                rules:{
+                    term:{
+                        required: true
+                    },
+                }
+            })
+
+            $("#alexaMax").parent().find("input[type='text']").change(function(){
+                let alexaMin = Number($("#alexaMin").parent().find("input[type='text']").val());
+                if(Number($(this).val()) < alexaMin){
+                    if($(this).val() != ""){
+                        $(this).val(alexaMin)
+                    }
+                }
+            })
+
+            $("#alexaMin").parent().find("input[type='text']").change(function(){
+                let alexaMax = $("#alexaMax").parent().find("input[type='text']");
+                if(Number($(this).val()) > Number($(alexaMax).val())){
+                    if($(alexaMax).val() != ""){
+                        $(alexaMax).val($(this).val())
+                    }
+                }
+            })
+
+            var table = $('#tableWithDynamicRows').DataTable({
+                "sDom": "<t><'row'<p i>>",
+                "destroy": true,
+                "scrollCollapse": true,
+                "oTableTools": {
+                    "sSwfPath": "../static/assets/plugins/jquery-datatable/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
+                    "aButtons": [{
+                        "sExtends": "csv",
+                        "sButtonText": "<i class='pg-grid'></i>",
+                    }, {
+                        "sExtends": "xls",
+                        "sButtonText": "<i class='fa fa-file-excel-o'></i>",
+                    }, {
+                        "sExtends": "pdf",
+                        "sButtonText": "<i class='fa fa-file-pdf-o'></i>",
+                    }, {
+                        "sExtends": "copy",
+                        "sButtonText": "<i class='fa fa-copy'></i>",
+                    }]
+                },
+                fnDrawCallback: function(oSettings) {
+                    $('.export-options-container').append($('.exportOptions'));
+
+                    $('#ToolTables_tableWithExportOptions_0').tooltip({
+                        title: 'Export as CSV',
+                        container: 'body'
+                    });
+
+                    $('#ToolTables_tableWithExportOptions_1').tooltip({
+                        title: 'Export as Excel',
+                        container: 'body'
+                    });
+
+                    $('#ToolTables_tableWithExportOptions_2').tooltip({
+                        title: 'Export as PDF',
+                        container: 'body'
+                    });
+
+                    $('#ToolTables_tableWithExportOptions_3').tooltip({
+                        title: 'Copy data',
+                        container: 'body'
+                    });
+                },
+                "oLanguage": {
+                    "sLengthMenu": "_MENU_ ",
+                    "sInfo": "Showing <b>_START_ to _END_</b> of _TOTAL_ entries"
+                },
+                "iDisplayLength": 10
+            });
+
+            $("#process").click(function(){
+                let formData = new FormData()
+                formData.append("term", $("#term").val());
+                formData.append("keywords", $("#keywords").val());
+                formData.append("ignore", $("#ignore").val());
+                formData.append("engine", $("#engine").val());
+                formData.append("driver", $("#driver").val());
+                formData.append("alexa_min", $("#alexaMin").val());
+                formData.append("alexa_max", $("#alexaMax").val());
+                
+                if(document.getElementById("file").files.length == 1){
+                    formData.append("file", document.getElementById("file").files[0])
+                }
+
+                form = $("#searchForm")
+                if($(form).valid()){
+                    if(!$("#resultsContainer").hasClass("hidden")){
+                        $("#resultsContainer").addClass("hidden");
+                    }
+                    fetch('process', {
+                        method: 'POST',
+                        body: formData,
+                    })
+                    .then(async (res) => {
+                        table.clear().draw();
+                        data = await res.json()
+                        for(dt in data){
+                            table.row.add([`<a href="${dt}">${dt}</a>`, data[dt]['keywords_rank'], data[dt]['alexa_rank']['popularity'], data[dt]['alexa_rank']['countryName'], data[dt]['alexa_rank']['countryRank']]).draw();
+                        }
+                        $("#resultsContainer").removeClass("hidden")
+                    })
+                    .catch(error => console.error('Error:', error))
+                    .then(response => console.log('Success:', response));
+                }
+            })
+        })
+    </script>
+{% endblock %}
