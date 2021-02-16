@@ -13,6 +13,8 @@ class ScraperContext:
             gChromeOptions = webdriver.ChromeOptions()
             gChromeOptions.add_argument("window-size=1920x1480")
             gChromeOptions.add_argument("disable-dev-shm-usage")
+            gChromeOptions.add_argument('--disable-gpu')
+            gChromeOptions.add_argument('--no-sandbox')
             self.driver = webdriver.Chrome(chrome_options=gChromeOptions, executable_path= ChromeDriverManager().install())
 
     def setEngine(self, engine = "google"):
