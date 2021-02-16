@@ -10,12 +10,14 @@ class ScraperContext:
 
     def setDriver(self, driver = "chrome"):
         if driver == "chrome":
-            gChromeOptions = webdriver.ChromeOptions()
-            gChromeOptions.add_argument("window-size=1920x1480")
-            gChromeOptions.add_argument("disable-dev-shm-usage")
-            gChromeOptions.add_argument('--disable-gpu')
-            gChromeOptions.add_argument('--no-sandbox')
-            self.driver = webdriver.Chrome(chrome_options=gChromeOptions, executable_path= ChromeDriverManager().install())
+            GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google_chrome'
+            CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
+
+            chrome_options = webdriver.ChromeOptions()
+            chrome_options.add_argument('--disable-gpu')
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.binary_location = GOOGLE_CHROME_PATH
+            self.driver = webdriver.Chrome(chrome_options=chrome_options, executable_path= CHROMEDRIVER_PATH)
 
     def setEngine(self, engine = "google"):
         if engine == "google":
