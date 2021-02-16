@@ -1,8 +1,8 @@
 from .scraper import Scraper
 from services.tool import Tool
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
 from .googleSearch import GoogleSearch
+import os
 
 class ScraperContext:
     strategy: Scraper = None
@@ -10,14 +10,12 @@ class ScraperContext:
 
     def setDriver(self, driver = "chrome"):
         if driver == "chrome":
-            GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google_chrome'
-            CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
-
             chrome_options = webdriver.ChromeOptions()
-            chrome_options.add_argument('--disable-gpu')
-            chrome_options.add_argument('--no-sandbox')
-            chrome_options.binary_location = GOOGLE_CHROME_PATH
-            self.driver = webdriver.Chrome(chrome_options=chrome_options, executable_path= CHROMEDRIVER_PATH)
+            chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+            chrome_options.add_argument("--headless")
+            chrome_options.add_argument("--disable-dev-shm-usage")
+            chrome_options.add_argument("--no-sandbox")
+            driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
     def setEngine(self, engine = "google"):
         if engine == "google":
