@@ -11,7 +11,7 @@ class ScraperContext:
     def setDriver(self, driver = "chrome"):
         if driver == "chrome":
             GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google_chrome'
-            CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver' 
+            CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
 
             chrome_options = webdriver.ChromeOptions()
             chrome_options.add_argument('--disable-gpu')
