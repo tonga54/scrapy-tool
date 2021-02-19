@@ -1,2 +1,1 @@
-web: gunicorn --bind 0.0.0.0:$PORT app:app --timeout 2200
-gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -w 1 app:app
+web: gunicorn -w 1 -k eventlet -b 127.0.0.1:5000
