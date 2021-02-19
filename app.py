@@ -80,4 +80,5 @@ def process():
         return {"error": True}, 401
 
 if __name__ == '__main__':
-    app.run(port = 9010, debug = False)
+    # app.run(port = 9010, debug = False)
+    socketio.run(app)
