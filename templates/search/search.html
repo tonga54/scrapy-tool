@@ -24,9 +24,15 @@
                         <div class="form-group form-group-default form-group-default-select2 col-lg-6">
                             <label>Ignore:</label>
                             <select class=" full-width" data-init-plugin="select2" multiple id="ignore" name="ignore">
-                                <option value="youtube">YouTube</option>
-                                <option value="facebook">Facebook</option>
-                                <option value="instagram">Instagram</option>
+                                <option value="youtube.com" selected>YouTube</option>
+                                <option value="facebook.com" selected>Facebook</option>
+                                <option value="instagram.com" selected>Instagram</option>
+                                <option value="twitter.com" selected>Twitter</option>
+                                <option value="pinterest.com" selected>Pinterest</option>
+                                <option value="vimeo.com" selected>Vimeo</option>
+                                <option value="google.com" selected>Google</option>
+                                <option value="wikipedia.org" selected>Wikipedia</option>
+                                <option value="hooksounds.com" selected>Hooksounds</option>
                             </select>
                         </div>
                     </div>
@@ -47,20 +53,20 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-2">
-                            <label>Engine:</label>
+                        <div class="form-group col-lg-3">
+                            <label style="display:block;">Search engine:</label>
                             <select class="cs-select cs-skin-slide" data-init-plugin="cs-select" id="engine" name="engine">
                                 <option value="google">Google</option>
-                                <option value="yahoo">Yahoo</option>
-                                <option value="bing">Bing</option>
+                                <option value="yahoo" disabled>Yahoo</option>
+                                <option value="bing" disabled>Bing</option>
                             </select>
                         </div>
                         <div class="form-group col-lg-2">
-                            <label>Driver:</label>
+                            <label style="display:block;">Driver:</label>
                             <select class="cs-select cs-skin-slide" data-init-plugin="cs-select" id="driver" name="driver">
                                 <option value="chrome">Chrome</option>
-                                <option value="firefox">Firefox</option>
-                                <option value="safari">Safari</option>
+                                <option value="firefox" disabled>Firefox</option>
+                                <option value="safari" disabled>Safari</option>
                             </select>
                         </div>
                     </div>
@@ -102,6 +108,15 @@
 {% block script %}
     <script>
         $(document).ready(function(){
+            var socket = io();
+            // socket.emit('message', 'hellow')
+            socket.on("message", function(msg){
+                alert(msg)
+            })
+            // socket.on('news', function (data) {
+            //     console.log(data);
+            //     socket.emit('my other event', { my: 'data' });
+            // });
 
             $("#searchForm").validate({
                 rules:{
@@ -130,48 +145,16 @@
             })
 
             var table = $('#tableWithDynamicRows').DataTable({
-                "sDom": "<t><'row'<p i>>",
+                // "sDom": "<t><'row'<p i>>",
                 "destroy": true,
                 "scrollCollapse": true,
-                "oTableTools": {
-                    "sSwfPath": "../static/assets/plugins/jquery-datatable/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
-                    "aButtons": [{
-                        "sExtends": "csv",
-                        "sButtonText": "<i class='pg-grid'></i>",
-                    }, {
-                        "sExtends": "xls",
-                        "sButtonText": "<i class='fa fa-file-excel-o'></i>",
-                    }, {
-                        "sExtends": "pdf",
-                        "sButtonText": "<i class='fa fa-file-pdf-o'></i>",
-                    }, {
-                        "sExtends": "copy",
-                        "sButtonText": "<i class='fa fa-copy'></i>",
-                    }]
-                },
-                fnDrawCallback: function(oSettings) {
-                    $('.export-options-container').append($('.exportOptions'));
-
-                    $('#ToolTables_tableWithExportOptions_0').tooltip({
-                        title: 'Export as CSV',
-                        container: 'body'
-                    });
-
-                    $('#ToolTables_tableWithExportOptions_1').tooltip({
-                        title: 'Export as Excel',
-                        container: 'body'
-                    });
-
-                    $('#ToolTables_tableWithExportOptions_2').tooltip({
-                        title: 'Export as PDF',
-                        container: 'body'
-                    });
-
-                    $('#ToolTables_tableWithExportOptions_3').tooltip({
-                        title: 'Copy data',
-                        container: 'body'
-                    });
-                },
+                dom: 'Bfrtip',
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ],
                 "oLanguage": {
                     "sLengthMenu": "_MENU_ ",
                     "sInfo": "Showing <b>_START_ to _END_</b> of _TOTAL_ entries"

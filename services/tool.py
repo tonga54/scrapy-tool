@@ -6,40 +6,26 @@ class Tool:
     @staticmethod
     def getAlexaRank(searchedData, min_popularity, max_popularity):
         try:
+            response = dict()
             for dt in searchedData:
                 xml = urllib.request.urlopen('http://data.alexa.com/data?cli=10&dat=s&url={}'.format(dt)).read()
                 result= xmltodict.parse(xml)
                 data = json.dumps(result).replace("@","")
                 data_tojson = json.loads(data)
-                deleteElement = True
                 if type(data_tojson["ALEXA"]["SD"]) is list:
                     if "COUNTRY" in data_tojson["ALEXA"]["SD"][1] and "POPULARITY" in data_tojson["ALEXA"]["SD"][1]:
                         countryName = data_tojson["ALEXA"]["SD"][1]["COUNTRY"]["NAME"]
                         countryRank = data_tojson["ALEXA"]["SD"][1]["COUNTRY"]["RANK"]
                         popularity = int(data_tojson["ALEXA"]["SD"][1]["POPULARITY"]["TEXT"])
                         if popularity >= min_popularity and popularity <= max_popularity:
-                            searchedData[dt]['alexa_rank'] = {
+                            response[dt] = searchedData[dt]
+                            response[dt]['alexa_rank'] = {
                                 "popularity": popularity,
                                 "countryName": countryName,
                                 "countryRank": countryRank
                             }
-                            deleteElement = False
 
-                if deleteElement:
-                    del searchedData[dt]
-
-            return searchedData
-        except Exception as e:
-            return e
-
-    @staticmethod
-    def goToPreviousPage(driver):
-        try:
-            current = driver.current_url
-            driver.back()
-            time.sleep(2)
-            if current == driver.current_url:
-                driver.back()
+            return response
         except Exception as e:
             return e
 
@@ -70,7 +56,7 @@ class Tool:
         return webs
 
     @staticmethod
-    def analyzeSite(url, text, keywords):
+    def analyzeSite(text, keywords):
         try:
             data = dict()
             data['keywords_rank'] = 0
@@ -78,7 +64,8 @@ class Tool:
                 if kw in text:
                     data['keywords_rank'] += 1
 
-            data['keywords_rank'] = (data['keywords_rank'] * 100) / len(keywords) 
+            if data['keywords_rank'] != 0:
+                data['keywords_rank'] = (data['keywords_rank'] * 100) / len(keywords) 
             return data
         except Exception as e:
             return e

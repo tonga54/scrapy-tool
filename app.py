@@ -1,10 +1,11 @@
 from flask import Flask, render_template, request
 from flask_cors import cross_origin
-from selenium import webdriver
+from flask_socketio import SocketIO, send
 from strategy.scraperContext import ScraperContext
 import sys
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 
 @app.route('/')
 def Index():
@@ -17,6 +18,7 @@ def search():
 @cross_origin()
 @app.route('/process', methods=['POST'])
 def process():
+    
     # location = {
     #     "latitude": 50.1109,
     #     "longitude": 8.6821,
@@ -60,13 +62,18 @@ def process():
         else:
             keywords = keywords.split(',')
 
+        if ignore == "":
+            ignore = []
+        else:
+            ignore = ignore.split(',')
+
         context = ScraperContext()
         context.setDriver()
         context.setEngine()
-        data = context.doSearch(searchInput= term, keywords= keywords, min_popularity= alexa_min, max_popularity= alexa_max, file= file)
+        data = context.doSearch(searchInput= term, keywords= keywords, min_popularity= alexa_min, max_popularity= alexa_max, ignore= ignore, file= file)
         return data, 200
     else:
         return {"error": True}, 401
 
 if __name__ == '__main__':
-    app.run(port = 9007, debug = False)
+    app.run(port = 9010, debug = False)
