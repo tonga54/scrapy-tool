@@ -109,14 +109,9 @@
     <script>
         $(document).ready(function(){
             var socket = io();
-            // socket.emit('message', 'hellow')
             socket.on("message", function(msg){
-                alert(msg)
+                console.log(msg)
             })
-            // socket.on('news', function (data) {
-            //     console.log(data);
-            //     socket.emit('my other event', { my: 'data' });
-            // });
 
             $("#searchForm").validate({
                 rules:{

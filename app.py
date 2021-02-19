@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 from flask_cors import cross_origin
 from flask_socketio import SocketIO, send
 from strategy.scraperContext import ScraperContext
-import sys
+import sys, threading
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -15,10 +15,14 @@ def Index():
 def search():
     return render_template('search/search.html')
 
+def repeatFunction():
+    threading.Timer(25, repeatFunction).start() # called every minute
+    socketio.emit("message", "Connection")
+
 @cross_origin()
 @app.route('/process', methods=['POST'])
 def process():
-    
+    repeatFunction()
     # location = {
     #     "latitude": 50.1109,
     #     "longitude": 8.6821,
