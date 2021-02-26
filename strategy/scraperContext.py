@@ -22,7 +22,7 @@ class ScraperContext:
             options = webdriver.ChromeOptions()
             options.add_argument('headless')
             options.add_argument("disable-gpu")
-            self.driver = webdriver.Chrome(executable_path="./drivers/chromedriver", options= options)
+            self.driver = webdriver.Chrome(executable_path="./drivers/chromedriver_linux", options= options)
 
     def setEngine(self, engine = "google"):
         if engine == "google":
