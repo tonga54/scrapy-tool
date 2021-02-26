@@ -5,7 +5,7 @@ from strategy.scraperContext import ScraperContext
 import sys, threading
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+# socketio = SocketIO(app)
 
 @app.route('/')
 def Index():
@@ -15,14 +15,14 @@ def Index():
 def search():
     return render_template('search/search.html')
 
-def repeatFunction():
-    threading.Timer(25, repeatFunction).start() # called every minute
-    socketio.emit("message", "Connection")
+# def repeatFunction():
+#     threading.Timer(25, repeatFunction).start() # called every minute
+#     socketio.emit("message", "Connection")
 
 @cross_origin()
 @app.route('/process', methods=['POST'])
 def process():
-    repeatFunction()
+    # repeatFunction()
     # location = {
     #     "latitude": 50.1109,
     #     "longitude": 8.6821,
@@ -80,5 +80,5 @@ def process():
         return {"error": True}, 401
 
 if __name__ == '__main__':
-    # app.run(port = 9010, debug = False)
-    socketio.run(app)
+    app.run(port = 9000, debug = False)
+    # socketio.run(app)
