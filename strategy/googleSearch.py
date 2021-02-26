@@ -48,9 +48,10 @@ class GoogleSearch(Scraper):
                         self.driver.switch_to.window(self.driver.window_handles[0])
                 if i == (len(results) - 1):
                     nextLink = self.driver.find_elements_by_id("pnnext")
+                    print(nextLink)
                     if len(nextLink) > 0:
                         nextLink[0].click()
-                        self.searchEngine(urlList, data)
+                        self.searchEngine(urlList, ignore, data)
                 
                 i += 1
             return data
