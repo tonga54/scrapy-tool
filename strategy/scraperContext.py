@@ -11,18 +11,18 @@ class ScraperContext:
     def setDriver(self, driver = "chrome"):
         if driver == "chrome":
             # PROD
-            chrome_options = webdriver.ChromeOptions()
-            chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-            chrome_options.add_argument("--headless")
-            chrome_options.add_argument("--disable-dev-shm-usage")
-            chrome_options.add_argument("--no-sandbox")
-            self.driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+            # chrome_options = webdriver.ChromeOptions()
+            # chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+            # chrome_options.add_argument("--headless")
+            # chrome_options.add_argument("--disable-dev-shm-usage")
+            # chrome_options.add_argument("--no-sandbox")
+            # self.driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
             
             # DEV
-            # options = webdriver.ChromeOptions()
-            # options.add_argument('headless')
-            # options.add_argument("disable-gpu")
-            # self.driver = webdriver.Chrome(executable_path="./drivers/chromedriver", options= options)
+            options = webdriver.ChromeOptions()
+            options.add_argument('headless')
+            options.add_argument("disable-gpu")
+            self.driver = webdriver.Chrome(executable_path="./drivers/chromedriver", options= options)
 
     def setEngine(self, engine = "google"):
         if engine == "google":
